@@ -29,45 +29,26 @@
   ></iframe>
 
   <script>
-    window.addEventListener('load', () => {
-      const params   = new URLSearchParams(window.location.search);
-      const iframeId = params.get('floating_iframe_id');
-      const clientId = params.get('client_id');
+    const params   = new URLSearchParams(window.location.search);
+    const iframeId = params.get('floating_iframe_id');
+    const clientId = params.get('client_id');
 
-      if (!iframeId || !clientId) {
-        console.error(
-          'Missing floating_iframe_id or client_id — cannot resize Coupa IFrame.'
-        );
-        return;
-      }
-
-      function resize(width, height, initial = false) {
-        window.parent.postMessage({
-          action:    'resize',
-          client_id: clientId,
-          iframe_id: iframeId,
-          data:      { width, height, initial }
-        }, '*');
-      }
-
-      // 1) Initial, one-time resize.
-      //    You can hard-code 600×600, or fill the browser viewport:
-      resize(
-        /* width */  window.innerWidth,
-        /* height */ window.innerHeight,
-        /* initial */ true
-      );
-
-      // 2) (Optional) If your chatbot’s height will grow over time,
-      //    you can watch the container with a ResizeObserver and
-      //    send more resize() calls without any buttons:
-      // const observer = new ResizeObserver(entries => {
-      //   for (let { width, height } of entries[0].contentRect) {
-      //     resize(Math.ceil(width), Math.ceil(height), false);
-      //   }
-      // });
-      // observer.observe(document.getElementById('chat-iframe'));
-    });
-  </script>
+    window.parent.postMessage(
+      {
+        action: "resize",
+        client_id: clientId,
+        iframe_id: iframeId,
+        data: {
+          height: 300, // height in px
+          width: 300, // width in px
+          initial: options.initial // Set this to true at the time of page load, false otherwise
+        }
+      }, "*" // substitute * with the coupahost url for enhanced security
+    );
+  }
+  
+  resize({ initial: true }) // Call this function with initial: true at the time of page reload.
+  resize({ initial: false }) // Call this function with initial: false at the time of button click to forcefully resize.
+</script>
 </body>
 </html>
