@@ -1,34 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Chatbot IFrame</title>
-  <style>
-    /* Make the iframe fill this page’s viewport */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-    #chat-iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-  </style>
-</head>
+<html>
 <body>
-  <!-- Your nested chatbot iframe -->
-  <iframe
-    id="chat-iframe"
-    src="https://copilotstudio.preview.microsoft.com/
-          environments/07ff480a-0be9-ea97-b6fb-2fbf232acb55/
-          bots/cr6f7_agent_a12gU3/webchat?__version__=2"
-  ></iframe>
-
-  <script>
+<iframe src="https://copilotstudio.preview.microsoft.com/environments/07ff480a-0be9-ea97-b6fb-2fbf232acb55/bots/cr6f7_agent_a12gU3/webchat?__version__=2" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+  
+<script>
     const params   = new URLSearchParams(window.location.search);
     const iframeId = params.get('floating_iframe_id');
     const clientId = params.get('client_id');
