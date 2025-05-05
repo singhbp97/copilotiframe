@@ -1,31 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Chatbot IFrame</title>
+  <style>
+    /* Make the iframe fill this page’s viewport */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    #chat-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
 <body>
-<iframe src="https://copilotstudio.preview.microsoft.com/environments/07ff480a-0be9-ea97-b6fb-2fbf232acb55/bots/cr6f7_agent_a12gU3/webchat?__version__=2"></iframe>
-</body>
-<script>
+  <!-- Your nested chatbot iframe -->
+  <iframe
+    id="chat-iframe"
+    src="https://copilotstudio.preview.microsoft.com/
+          environments/07ff480a-0be9-ea97-b6fb-2fbf232acb55/
+          bots/cr6f7_agent_a12gU3/webchat?__version__=2"
+  ></iframe>
 
-let urlParams = new URLSearchParams(document.location.search);
-console.log("Hello");
-console.log(urlParams.get("floating_iframe_id"));  // gets iframe id
+  <script>
+    window.addEventListener('load', () => {
+      const params   = new URLSearchParams(window.location.search);
+      const iframeId = params.get('floating_iframe_id');
+      const clientId = params.get('client_id');
 
-// A function to send a postmessage call from your chatbot to Coupa Core to resize.
-function resize(options = {}){
-  window.parent.postMessage(
-    {
-      action: "resize",
-      client_id: "12345",
-      iframe_id: urlParams.get("floating_iframe_id"),
-      data: {
-        height: 600, // height in px
-        width: 600, // width in px
-        initial: options.initial // Set this to true at the time of page load, false otherwise
+      if (!iframeId || !clientId) {
+        console.error(
+          'Missing floating_iframe_id or client_id — cannot resize Coupa IFrame.'
+        );
+        return;
       }
-    }, "*" // substitute * with the coupahost url for enhanced security
-  );
-}
 
-resize({ initial: true }) // Call this function with initial: true at the time of page reload.
-resize({ initial: false }) // Call this function with initial: false at the time of button click to forcefully resize.
-</script>
+      function resize(width, height, initial = false) {
+        window.parent.postMessage({
+          action:    'resize',
+          client_id: clientId,
+          iframe_id: iframeId,
+          data:      { width, height, initial }
+        }, '*');
+      }
+
+      // 1) Initial, one-time resize.
+      //    You can hard-code 600×600, or fill the browser viewport:
+      resize(
+        /* width */  window.innerWidth,
+        /* height */ window.innerHeight,
+        /* initial */ true
+      );
+
+      // 2) (Optional) If your chatbot’s height will grow over time,
+      //    you can watch the container with a ResizeObserver and
+      //    send more resize() calls without any buttons:
+      // const observer = new ResizeObserver(entries => {
+      //   for (let { width, height } of entries[0].contentRect) {
+      //     resize(Math.ceil(width), Math.ceil(height), false);
+      //   }
+      // });
+      // observer.observe(document.getElementById('chat-iframe'));
+    });
+  </script>
+</body>
 </html>
