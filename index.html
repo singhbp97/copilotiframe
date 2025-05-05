@@ -6,7 +6,8 @@
 <script>
 
 let urlParams = new URLSearchParams(document.location.search);
-urlParams.get("floating_iframe_id") // gets iframe id
+console.log("Hello");
+console.log(urlParams.get("floating_iframe_id"));  // gets iframe id
 
 // A function to send a postmessage call from your chatbot to Coupa Core to resize.
 function resize(options = {}){
