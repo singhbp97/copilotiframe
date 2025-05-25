@@ -7,6 +7,7 @@
     const params   = new URLSearchParams(window.location.search);
     const iframeId = params.get('floating_iframe_id');
     const clientId = params.get('client_id');
+    console.log("Client ID: " + clientId)
     
     function resize(options = {}){
       window.parent.postMessage(
