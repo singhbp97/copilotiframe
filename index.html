@@ -1,1 +1,30 @@
-<!DOCTYPE html><html><body><iframe src="https://www.w3schools.com" frameborder="0" style="width: 100%; height: 100%;"></iframe></body></html>
+<!DOCTYPE html>
+<html>
+<body>
+<iframe height=1000px width=100% src="https://copilotstudio.microsoft.com/environments/Default-a6efc063-719d-4b6e-a27e-af4c8cc45d85/bots/cr499_coffeeGuru/webchat?__version__=2" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+  
+<script>
+    const params   = new URLSearchParams(window.location.search);
+    const iframeId = params.get('floating_iframe_id');
+    const clientId = params.get('client_id');
+    console.log("Client ID: " + clientId)
+    
+    function resize(options = {}){
+      window.parent.postMessage(
+        {
+          action: "resize",
+          client_id: clientId,
+          iframe_id: iframeId,
+          data: {
+            height: 1000, // height in px
+            width: 300, // width in px
+            initial: options.initial // Set this to true at the time of page load, false otherwise
+          }
+        }, "*" // substitute * with the coupahost url for enhanced security
+      );
+   } 
+  
+  resize({ initial: true }) // Call this function with initial: true at the time of page reload.
+</script>
+</body>
+</html>
